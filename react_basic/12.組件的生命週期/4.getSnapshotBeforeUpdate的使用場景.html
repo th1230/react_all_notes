@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>4.getSnapShotBeforeUpdate的使用場景</title>
+    <style>
+      .list {
+        width: 200px;
+        height: 150px;
+        background-color: skyblue;
+        overflow: auto;
+      }
+      .news {
+        height: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 準備好一個“容器” -->
+    <div id="test"></div>
+
+    <!-- 引入react核心庫 -->
+    <script
+      type="text/javascript"
+      src="../js/17.0.1/react.development.js"
+    ></script>
+    <!-- 引入react-dom，用於支持react操作DOM -->
+    <script
+      type="text/javascript"
+      src="../js/17.0.1/react-dom.development.js"
+    ></script>
+    <!-- 引入babel，用於將jsx轉為js -->
+    <script type="text/javascript" src="../js/17.0.1/babel.min.js"></script>
+
+    <script type="text/babel">
+      class NewsList extends React.Component {
+        state = { newsArr: [] };
+
+        componentDidMount() {
+          setInterval(() => {
+            //獲取原狀態
+            const { newsArr } = this.state;
+            //模擬一條新聞
+            const news = "新聞" + (newsArr.length + 1);
+            //更新狀態
+            this.setState({ newsArr: [news, ...newsArr] });
+          }, 1000);
+        }
+
+        getSnapshotBeforeUpdate() {
+          return this.refs.list.scrollHeight;
+        }
+
+        componentDidUpdate(preProps, preState, height) {
+          this.refs.list.scrollTop += this.refs.list.scrollHeight - height;
+        }
+
+        render() {
+          return (
+            <div className="list" ref="list">
+              {this.state.newsArr.map((n, index) => {
+                return (
+                  <div key={index} className="news">
+                    {n}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<NewsList />, document.getElementById("test"));
+    </script>
+  </body>
+</html>

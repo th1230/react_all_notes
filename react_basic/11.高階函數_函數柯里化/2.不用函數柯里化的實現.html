@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2.不用函數柯里化的實現</title>
+  </head>
+  <body>
+    <!-- 準備好一個容器 -->
+    <div id="test"></div>
+    <!-- 引入react核心庫 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom 用於支持react操作DOM -->
+    <script
+      type="text/javascript"
+      src="../js/react-dom.development.js"
+    ></script>
+    <!-- 引入babel，用於將jsx轉換為js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 此處一定要寫babel -->
+    <script type="text/babel">
+      class Login extends React.Component {
+        // 初始化狀態
+        state = {
+          username: "",
+          password: "",
+        };
+
+        // 保存表單數據到狀態中
+        saveFormData = (dataType, value) => {
+          this.setState({ [dataType]: value });
+        };
+
+        handleSubmit = (e) => {
+          e.preventDefault();
+          const { username, password } = this.state;
+          alert(`用戶名:${username},密碼${password}`);
+        };
+        render() {
+          return (
+            <form
+              action="https://zh-hant.reactjs.org/"
+              onSubmit={this.handleSubmit}
+            >
+              帳號:
+              <input
+                type="text"
+                name="username"
+                onChange={(event) => {
+                  this.saveFormData("username", event.target.value);
+                }}
+              />
+              密碼:
+              <input
+                type="text"
+                name="password"
+                onChange={(event) => {
+                  this.saveFormData("password", event.target.value);
+                }}
+              />
+              <button>提交</button>
+            </form>
+          );
+        }
+      }
+
+      ReactDOM.render(<Login />, document.getElementById("test"));
+    </script>
+  </body>
+</html>

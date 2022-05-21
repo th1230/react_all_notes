@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>4.函數式組件使用props</title>
+  </head>
+  <body>
+    <!-- 準備好一個“容器” -->
+    <div id="test1"></div>
+    <div id="test2"></div>
+    <div id="test3"></div>
+
+    <!-- 引入react核心庫 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom，用於支持react操作DOM -->
+    <script
+      type="text/javascript"
+      src="../js/react-dom.development.js"
+    ></script>
+    <!-- 引入babel，用於將jsx轉為js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 引入prop-types，用於對組件標籤屬性進行限制 -->
+    <script type="text/javascript" src="../js/prop-types.js"></script>
+
+    <script type="text/babel">
+      //創建組件
+      /*   class Person extends React.Component {
+        //對標籤屬性進行類型、必要性的限制
+        static propTypes = {
+          name: PropTypes.string.isRequired, //限制name必傳，且為字符串
+          sex: PropTypes.string, //限制sex為字符串
+          age: PropTypes.number, //限制age為數值
+        };
+
+        //指定默認標籤屬性值
+        static defaultProps = {
+          sex: "男", //sex默認值為男
+          age: 18, //age默認值為18
+        };
+
+        render() {
+          // console.log(this);
+          const { name, age, sex } = this.props;
+          //props是只讀的
+          //this.props.name = 'jack' //此行代碼會報錯，因為props是只讀的
+          return (
+            <ul>
+              <li>姓名：{name}</li>
+              <li>性別：{sex}</li>
+              <li>年齡：{age + 1}</li>
+            </ul>
+          );
+        }
+      } */
+
+      function Person(props) {
+        const { name, age, sex } = props;
+        return (
+          <ul>
+            <li>姓名：{name}</li>
+            <li>性別：{sex}</li>
+            <li>年齡：{age + 1}</li>
+          </ul>
+        );
+      }
+
+      Person.propTypes = {
+        name: PropTypes.string.isRequired, //限制name必傳，且為字符串
+        sex: PropTypes.string, //限制sex為字符串
+        age: PropTypes.number, //限制age為數值
+      };
+
+      //指定默認標籤屬性值
+      Person.defaultProps = {
+        sex: "不提供性別", //sex默認值為男
+        age: 18, //age默認值為18
+      };
+
+      //渲染組件到頁面
+      ReactDOM.render(
+        <Person name="jerry" />,
+        document.getElementById("test1")
+      );
+    </script>
+  </body>
+</html>

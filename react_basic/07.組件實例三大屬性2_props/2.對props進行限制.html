@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>2.對props進行限制</title>
+  </head>
+  <body>
+    <div id="person1"></div>
+    <div id="person2"></div>
+    <div id="person3"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script
+      type="text/javascript"
+      src="../js/react-dom.development.js"
+    ></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 需要引入prop-types，這樣才可以在全域中獲取到PropTypes(用於對props進行類型...等限制) -->
+    <script type="text/javascript" src="../js/prop-types.js"></script>
+
+    <script type="text/babel">
+      //創建組件
+      class Person extends React.Component {
+        render() {
+          const { name, age, sex } = this.props;
+          // this.props.name = "jack"; //此行代碼會報錯，因為props是只讀的
+          return (
+            <ul>
+              <li>姓名:{name}</li>
+              <li>年齡:{age + 1}</li>
+              <li>性別:{sex}</li>
+            </ul>
+          );
+        }
+      }
+      // 對標籤屬性進行類型、必要性的限制
+      Person.propTypes = {
+        name: PropTypes.string.isRequired, // 限制name是一個字串，且必傳
+        age: PropTypes.number, // 限制age是一個數字
+        sex: PropTypes.string, // 限制sex是一個字串
+        speak: PropTypes.func, // 限制speak是一個函數
+      };
+      // 指定默認標籤屬性值
+      Person.defaultProps = {
+        sex: "不提供",
+        age: 18,
+      };
+
+      function speak() {
+        console.log("說話");
+      }
+
+      // 渲染組件到頁面
+      ReactDOM.render(
+        <Person name="mike" age={20} />,
+        document.getElementById("person1")
+      );
+      ReactDOM.render(
+        <Person name="nancy" sex="女" speak={speak} />,
+        document.getElementById("person2")
+      );
+
+      const p = {
+        name: "geroge",
+        age: 25,
+        sex: "男",
+      };
+      //   ReactDOM.render(
+      //     <Person name={p.name} age={p.age} sex={p.sex} />,
+      //     document.getElementById("person3")
+      //   );
+      ReactDOM.render(<Person {...p} />, document.getElementById("person3"));
+    </script>
+  </body>
+</html>

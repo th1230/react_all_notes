@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.函數ref回調執行次數的問題</title>
+  </head>
+  <body>
+    <!-- 準備好一個容器 -->
+    <div id="test"></div>
+    <!-- 引入react核心庫 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom 用於支持react操作DOM -->
+    <script
+      type="text/javascript"
+      src="../js/react-dom.development.js"
+    ></script>
+    <!-- 引入babel，用於將jsx轉換為js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 此處一定要寫babel -->
+    <script type="text/babel">
+      //創建組件
+      class Demo extends React.Component {
+        state = {
+          isHot: false,
+        };
+
+        showInfo = () => {
+          alert(this.input1.value);
+        };
+
+        changeWeather = () => {
+          const { isHot } = this.state;
+          console.log(isHot);
+          this.setState({ isHot: !isHot });
+        };
+
+        /* 
+          函數ref回掉執行次數的問題:
+            如何解決: 解決函數ref在變動數據時執行兩次的問題，可以透過宣告類函數(saveInput)，並將其作為ref回調函數使用，則不會重複調用
+        */
+
+        saveInput = (c) => {
+          this.input1 = c;
+        };
+
+        render() {
+          const { isHot } = this.state;
+
+          return (
+            <div>
+              <h1>今天天氣很{isHot ? "炎熱" : "涼爽"}</h1>
+              {/* <input type="text" ref={(c) => {this.input1 = c; console.log("@", c); }} /> */}
+              <input ref={this.saveInput} type="text" />
+              <button onClick={this.showInfo}>展示左邊訊息</button>
+              <button onClick={this.changeWeather}>改變天氣</button>
+            </div>
+          );
+        }
+      }
+
+      // 渲染組件
+      ReactDOM.render(<Demo />, document.getElementById("test"));
+    </script>
+  </body>
+</html>

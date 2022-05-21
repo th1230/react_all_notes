@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2.函數形式的ref</title>
+  </head>
+  <body>
+    <!-- 準備好一個容器 -->
+    <div id="test"></div>
+    <!-- 引入react核心庫 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom 用於支持react操作DOM -->
+    <script
+      type="text/javascript"
+      src="../js/react-dom.development.js"
+    ></script>
+    <!-- 引入babel，用於將jsx轉換為js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 此處一定要寫babel -->
+    <script type="text/babel">
+      //創建組件
+      class Demo extends React.Component {
+        //展示左側輸入框訊息
+        showData = () => {
+          const { input1 } = this;
+          alert(input1.value);
+        };
+
+        //展示右側輸入框訊息
+        showData2 = () => {
+          const { input2 } = this;
+          alert(input2.value);
+        };
+
+        /* 
+          函數ref:
+            1. 接收一個涵式，react會傳入該節點的真實dom作為參數
+            2. 在對數據進行變動時，會導致該函數被調用兩次(官網描述說無關緊要)
+        */
+
+        render() {
+          return (
+            <div>
+              <input
+                ref={(c) => {
+                  this.input1 = c;
+                }}
+                type="text"
+                placeholder="點擊按紐提示數據"
+              />
+              <button onClick={this.showData}>點擊我顯示左側數據</button>
+              <input
+                ref={(c) => {
+                  this.input2 = c;
+                }}
+                type="text"
+                placeholder="失去焦點提示數據"
+                onBlur={this.showData2}
+              />
+            </div>
+          );
+        }
+      }
+
+      // 渲染組件
+      ReactDOM.render(<Demo />, document.getElementById("test"));
+    </script>
+  </body>
+</html>
